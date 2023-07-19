@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Login & Registration Form</title>
+  <link rel="stylesheet" href="loginRegister.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.4/axios.min.js"></script>
+
+
+
+</head>
+
+<body>
+  <div class="container">
+    <input type="checkbox" id="check">
+    <div class="loginForm form">
+      <h1>Login</h1>
+      <form action="#" id="loginForm">
+        <div>
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="Enter your email" required>
+        </div>
+        <div>
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" required>
+        </div>
+        <a href="#">Forgot password?</a>
+        <input type="submit" class="button" value="Login" id="login">
+      </form>
+
+      <div class="signup">
+        <span class="signup">Don't have an account?
+          <label for="check">Signup</label>
+        </span>
+      </div>
+    </div>
+    <div class="registrationForm form">
+
+
+
+      <h1>Signup</h1>
+      <form id="registrationForm">
+        <div>
+          <label for="signupPassword">NAME</label>
+          <input type="text" id="name" placeholder="Enter Your Full Name" required>
+        </div>
+        <div>
+          <label for="signupEmail">Email</label>
+          <input type="email" id="email" placeholder="Enter your email" required>
+        </div>
+        <div>
+          <label for="confirmPassword">Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required>
+        </div>
+        <input type="submit" class="button" value="Signup" id="signup">
+      </form>
+
+
+
+      <div class="signup">
+        <span class="signup">Already have an account?
+          <label for="check">Login</label>
+        </span>
+      </div>
+    </div>
+  </div>
+  <script src="./loginRegister.js"></script>
+</body>
+
+</html>
