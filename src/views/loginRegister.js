@@ -1,4 +1,3 @@
-
 const registrationForm = document.getElementById('registrationForm');
 
 registrationForm.addEventListener('submit', async (e) => {
@@ -9,10 +8,9 @@ registrationForm.addEventListener('submit', async (e) => {
   const data = { name, email, password };
 
   try {
-    
-    await axios.post('http://localhost:4000/user/register', data);
-    registrationForm.reset();
-    alert("Register Successful")
+    const userInfo = await axios.post('http://localhost:4000/user/register', data);
+    alert(userInfo.data.message)
+    registrationForm.reset(); 
   } catch (error) {
     console.error(error);
   }
