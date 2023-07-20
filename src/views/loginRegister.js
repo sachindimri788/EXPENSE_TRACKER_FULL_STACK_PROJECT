@@ -10,7 +10,7 @@ registrationForm.addEventListener('submit', async (e) => {
 
   try {
     
-    await axios.post('http://localhost:3000/user/register', data);
+    await axios.post('http://localhost:4000/user/register', data);
     registrationForm.reset();
     alert("Register Successful")
   } catch (error) {
