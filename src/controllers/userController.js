@@ -22,12 +22,16 @@ const userRegister = async (req, res) => {
 const userLogin=async(req,res)=>{
     try {
         const{email,password}=req.body;
-        const user={email,password};
-        const userInfo=await userServices.userLogin(user);
+        const isMailExists=userServices.isMailExists(email);
+        if(isMailExists){
+        const userInfo=await userServices.userLogin(password);
         if(userInfo){
             return res.status(200).json({ message: "Login SuccessFully" });
         }else{
-            return res.status(200).json({ message: "Invalid Email or Password" });
+            return res.status(401).json({ message: "Invalid Password" });
+        }}
+        else{
+            return res.status(404).json({message:"User Not found"});
         }
     } catch (error) {
         console.log(error.message)
