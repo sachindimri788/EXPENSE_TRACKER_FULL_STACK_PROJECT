@@ -3,8 +3,8 @@ const registrationForm = document.getElementById('registrationForm');
 registrationForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const email = document.getElementById('userEmail').value;
+  const password = document.getElementById('userPassword').value;
   const data = { name, email, password };
 
   try {

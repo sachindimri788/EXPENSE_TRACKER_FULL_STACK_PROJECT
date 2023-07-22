@@ -1,0 +1,44 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background-color: #effeff;
+}
+
+.editDelete {
+  float: right;
+  margin: 3px;
+  padding: 3px 10px;
+}
+
+#table {
+  border-radius: 10px;
+  background-color: #d2eaf7;
+  box-shadow: 4px 4px 9px #b8b8b8;
+}
+
+.trStyle {
+  background-color: transparent;
+}
+
+.editDelete:hover {
+  background-color: #ffffff;
+  color: #009579;
+  border-color: #009579;
+}
+
+.editDelete {
+  background-color: #009579;
+  border: none;
+}
+
+#tableHead {
+  background-color: #009579;
+  color: white;
+}

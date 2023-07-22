@@ -1,30 +1,27 @@
 const sequelize = require('../../config/db');
 const { DataTypes } = require('sequelize');
-sequelize.options.logging = false;
 
-const User = sequelize.define(
-  'user',
+const Expense = sequelize.define(
+  'expense',
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement:true
     },
-    name: {
+    expenseAmount: {
       type: DataTypes.STRING,
       allowNull: false,
-    
     },
-    email: {
+    category: {
       type: DataTypes.STRING,
       allowNull: false,
-     
     },
-    password:{
+    description:{
         type:DataTypes.STRING,
         allowNull: false,
     }
   },
 );
 
-module.exports=User;
+module.exports=Expense;

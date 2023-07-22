@@ -14,7 +14,7 @@ const userRegister = async (req, res) => {
         return res.status(409).json({ message: "Email Already Exists" });
         }
     } catch (error) {
-        return res.status(500).json({ message: "internal Error" })
+        return res.status(500).json({ message: "failed",error:error.message })
     }
 
 };
@@ -34,8 +34,7 @@ const userLogin=async(req,res)=>{
             return res.status(404).json({message:"User Not found"});
         }
     } catch (error) {
-        console.log(error.message)
-        return res.status(500).json({ message: "internal Error" });
+        return res.status(500).json({ message: "failed",error:error.message});
     }
 }
 

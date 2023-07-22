@@ -1,24 +1,24 @@
 const User = require('../models/userModel');
-const bcrypt=require('bcrypt');
+const bcrypt = require('bcrypt');
 
 class UserRepo {
     async userRegister(user) {
         try {
-            bcrypt.hash(user.password,10,async (err,hash)=>{
-                if(hash){
-                    return await User.create({name:user.name,email:user.email,password:hash});
+            bcrypt.hash(user.password, 10, async (err, hash) => {
+                if (hash) {
+                    return await User.create({ ...user, password: hash });
                 }
-                else{
+                else {
                     throw new Error();
                 }
             });
-            
+
         } catch (error) {
             throw new Error("internal Error")
         }
 
     }
-    
+
     async isMailExists(email) {
         try {
             const exist = await User.findOne({ where: { email } });
@@ -28,18 +28,19 @@ class UserRepo {
         }
     }
 
-    async userLogin(email,password) {
+    async userLogin(email, password) {
         try {
             const user = await User.findOne({ where: { email } });
-            const bpass= await bcrypt.compare(password,user.password);
-            if(bpass){
-            return user;}
-            else{
+            const bpass = await bcrypt.compare(password, user.password);
+            if (bpass) {
+                return user;
+            }
+            else {
                 return false;
             }
 
         } catch (error) {
-            throw new Error({ message: "internal error" });
+            throw new Error("internal error");
         }
     }
 }
