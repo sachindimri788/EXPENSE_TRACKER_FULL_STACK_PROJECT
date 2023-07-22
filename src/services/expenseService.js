@@ -1,17 +1,17 @@
 const ExpenseRepo=require('../repo/expenseRepo');
 const expenseRepo=new ExpenseRepo();
 class ExpenseServices{
-    async addExpense(expenseInfo){
+    async addExpense(expenseInfo,userId){
         try {
-            return await expenseRepo.addExpense(expenseInfo)
+            return await expenseRepo.addExpense(expenseInfo,userId)
         } catch (error) {
             throw new Error(error.message?error.message:"error") //if error from services then simple error or if error from userRepo then error.message
         }
     }
 
-    async getAllExpense(){
+    async getAllExpense(userId){
         try {
-            return await expenseRepo.getAllExpense();
+            return await expenseRepo.getAllExpense(userId);
         } catch (error) {
             throw new Error(error.message?error.message:"error")
         }

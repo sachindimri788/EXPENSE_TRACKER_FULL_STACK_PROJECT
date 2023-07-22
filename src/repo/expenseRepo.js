@@ -1,18 +1,18 @@
 const Expense = require('../models/expenseModel');
 
 class UserRepo{
-    async addExpense(expenseInfo){
+    async addExpense(expenseInfo,userId){
         try {
-            return await Expense.create(expenseInfo);
+            return await Expense.create({...expenseInfo,userId});
         } catch (error) {
             throw new Error("internal Error")
         }
         
     }
     
-    async getAllExpense(){
+    async getAllExpense(userId){
         try {
-            return await Expense.findAll();
+            return await Expense.findAll({where:{userId}});
         } catch (error) {
             throw new Error("internal Error")
         }   

@@ -1,4 +1,5 @@
-const UserServices = require('../services/userService')
+const UserServices = require('../services/userService');
+const { generateToken } = require('../util/auth');
 const userServices = new UserServices();
 
 const userRegister = async (req, res) => {
@@ -26,7 +27,9 @@ const userLogin=async(req,res)=>{
         if(exist){
         const userInfo=await userServices.userLogin(email,password);
         if(userInfo){
-            return res.status(200).json({ message: "Login SuccessFully" });
+            
+            const token=generateToken({userId:userInfo.dataValues.id,userName:userInfo.dataValues.name});
+            return res.status(200).json({ message: "Login SuccessFully",token});
         }else{
             return res.status(401).json({ message: "Invalid Password" });
         }}
