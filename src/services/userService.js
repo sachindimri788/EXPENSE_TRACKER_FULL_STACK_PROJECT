@@ -7,8 +7,8 @@ class UserServices{
     async isMailExists(email){
         return userRepo.isMailExists(email);
     }
-    async userLogin(password){
-        return userRepo.userLogin(password);
+    async userLogin(email,password){
+        return userRepo.userLogin(email,password);
     }
 }
 

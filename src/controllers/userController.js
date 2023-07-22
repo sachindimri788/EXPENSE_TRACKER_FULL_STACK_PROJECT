@@ -5,13 +5,13 @@ const userRegister = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const user = { name, email, password }
-        const isMailExists=userServices.isMailExists(email);
-        if(!isMailExists){
+        const exist=await userServices.isMailExists(email);
+        if(!exist){
         await userServices.userRegister(user)
         return res.status(200).json({ message: "Register Successful" });
         }
         else{
-        return res.status(200).json({ message: "Email Already Exists" });
+        return res.status(409).json({ message: "Email Already Exists" });
         }
     } catch (error) {
         return res.status(500).json({ message: "internal Error" })
@@ -22,9 +22,9 @@ const userRegister = async (req, res) => {
 const userLogin=async(req,res)=>{
     try {
         const{email,password}=req.body;
-        const isMailExists=userServices.isMailExists(email);
-        if(isMailExists){
-        const userInfo=await userServices.userLogin(password);
+        const exist=await userServices.isMailExists(email);
+        if(exist){
+        const userInfo=await userServices.userLogin(email,password);
         if(userInfo){
             return res.status(200).json({ message: "Login SuccessFully" });
         }else{
