@@ -1,6 +1,6 @@
 let id = "";
 
-const token = localStorage.getItem('token');
+
 const form = document.getElementById('myForm');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -14,11 +14,9 @@ form.addEventListener('submit', async (event) => {
   };
   if (id === '') {
     try {
+      const token = localStorage.getItem('token');
       await axios.post('http://localhost:4000/expense', obj, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
+        headers: {Authorization: `Bearer ${token}`}
       });
       console.log('User verified');
       await displayData();
@@ -30,11 +28,9 @@ form.addEventListener('submit', async (event) => {
     }
   } else {
     try {
+      const token = localStorage.getItem('token');
       await axios.put(`http://localhost:4000/expense/${id}`, obj, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        }
+        headers: {Authorization: `Bearer ${token}`}
       });
       await displayData();
       form.reset();
@@ -47,11 +43,9 @@ form.addEventListener('submit', async (event) => {
 
 async function displayData() {
   try {
+    const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:4000/expense', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+      headers: {Authorization: `Bearer ${token}`}
     });
     const tbody = document.getElementById('tbodyId');
     tbody.innerHTML = '';
@@ -89,11 +83,9 @@ async function displayData() {
 
 async function deleteData(id) {
   try {
+    const token = localStorage.getItem('token');
     await axios.delete(`http://localhost:4000/expense/${id}`, {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+      headers: {Authorization: `Bearer ${token}`}
     });
     await displayData();
   } catch (error) {
@@ -104,11 +96,9 @@ async function deleteData(id) {
 
 async function editData(editId) {
   try {
+    const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:4000/expense', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+      headers: {Authorization: `Bearer ${token}`}
     });
     const data = response.data;
     if (data !== null) {
@@ -126,3 +116,64 @@ async function editData(editId) {
 }
 
 displayData();
+
+
+
+//-----------------------buyPremiumBtn--------------------//
+
+const buyPremiumBtn=document.getElementById('buyPremiumBtn');
+
+buyPremiumBtn.addEventListener('click', async (e) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.get('http://localhost:4000/user/purchasePremium', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    var options = {
+      key: res.data.key_id, // Enter the Key ID generated from the Dashboard
+      order_id: res.data.orderid, // For one-time payment
+      handler: async function (response) { // This handler function will handle the success payment
+        try {
+          const resp = await axios.post("http://localhost:4000/user/updateTransactionStatus",
+            {
+              order_id: options.order_id,
+              payment_id: response.razorpay_payment_id,
+            },
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          console.log(resp)
+          if (resp.data.success) {
+            alert("Welcome to our Premium Membership, You now have access to Reports and LeaderBoard");
+          } else {
+            alert("Payment failed. Please try again.");
+          }
+        } catch (error) {
+          alert("Payment failed. Please try again.");
+        }
+      },
+    };
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+
+  } catch (error) {
+    console.log(error);
+    alert("Try Again");
+  }
+});
+
+
+
+
+//-----------------------buyPremiumBtn--------------------//
+
+
+//-----------------------logout--------------------//
+const logoutButton = document.getElementById("logoutBtn");
+logoutButton.addEventListener("click", () => {
+  localStorage.removeItem("token");
+  logout();
+});
+function logout() {
+  window.location.href = '../loginRegister/loginRegister.html';
+}
+//-----------------------logout--------------------//

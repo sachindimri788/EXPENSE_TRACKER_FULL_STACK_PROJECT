@@ -1,3 +1,4 @@
+const Order = require('../models/orders');
 const User = require('../models/userModel');
 const bcrypt = require('bcrypt');
 
@@ -43,6 +44,39 @@ class UserRepo {
             throw new Error("internal error");
         }
     }
+    async findByStatusAndId(info) {
+        try {
+            return await Order.findOne({ where: info })
+        } catch (error) {
+            throw new Error("internal error");
+        }
+    }
+
+    async createOrder(order) {
+        try {
+            return await Order.create(order);
+        } catch (error) {
+            throw new Error("internal error");
+        }
+    }
+
+
+    async orderUpdate(info,orderId) {
+        try {
+            return await Order.update(info, { where: orderId });
+        } catch (error) {
+            throw new Error("internal error");
+        }
+    }
+
+    async userUpdate(info,id){
+        try {
+           return await User.update(info, { where: id })
+        } catch (error) {
+            throw new Error("internal error");
+        }
+    }
+
 }
 
 module.exports = UserRepo;

@@ -16,8 +16,8 @@ const addExpense= async (req, res)=>{
 const getAllExpense = async (req, res) => {
     try {
         const userId=res.locals.userId;
-        const user=await expenseServices.getAllExpense(userId);
-        res.status(200).json(user);
+        const expense=await expenseServices.getAllExpense(userId);
+        res.status(200).json(expense);
     }
     catch (error) {
         

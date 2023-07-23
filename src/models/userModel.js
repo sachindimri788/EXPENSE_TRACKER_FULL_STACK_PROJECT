@@ -24,7 +24,12 @@ const User = sequelize.define(
     password:{
         type:DataTypes.STRING,
         allowNull: false,
-    }
+    },
+    isPremiumUser: DataTypes.BOOLEAN,
+  // totalExpenses: {
+  //   type: Sequelize.INTEGER,
+  //   defaultValue: 0,
+  // },
   },
 );
 
