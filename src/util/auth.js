@@ -14,8 +14,8 @@ const verifyToken = async (req, res, next) => {
         res.status(403).json({ result: 'Invalid token' });
       } else {
         const userId = decoded?.user.userId;
-        // const user = await User.findOne({where:{id:userId}})
-        // req.user=user;
+        const user = await User.findOne({where:{id:userId}})
+        res.locals.user=user;
         res.locals.userId = userId;
         next();
       }

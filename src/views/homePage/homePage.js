@@ -115,7 +115,7 @@ async function editData(editId) {
   }
 }
 
-displayData();
+
 
 
 
@@ -123,7 +123,7 @@ displayData();
 
 const buyPremiumBtn=document.getElementById('buyPremiumBtn');
 
-buyPremiumBtn.addEventListener('click', async (e) => {
+async function handlePremiumPurchase() {
   try {
     const token = localStorage.getItem('token');
     const res = await axios.get('http://localhost:4000/user/purchasePremium', {
@@ -143,7 +143,8 @@ buyPremiumBtn.addEventListener('click', async (e) => {
           );
           console.log(resp)
           if (resp.data.success) {
-            alert("Welcome to our Premium Membership, You now have access to Reports and LeaderBoard");
+            alert("Welcome to our Premium Membership");
+            isPremiumUser();
           } else {
             alert("Payment failed. Please try again.");
           }
@@ -154,17 +155,35 @@ buyPremiumBtn.addEventListener('click', async (e) => {
     };
     const rzp1 = new Razorpay(options);
     rzp1.open();
-
   } catch (error) {
     console.log(error);
     alert("Try Again");
   }
-});
+}
 
+buyPremiumBtn.addEventListener('click', handlePremiumPurchase);
+//-----------------------End---buyPremiumBtn--------------------//
 
+//------------------------isPremiumUser------------------------//
+async function isPremiumUser() {
+  const token = localStorage.getItem("token");
+  const res = await axios.get("http://localhost:4000/user/isPremiumUser", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 
+  if (res.data.isPremiumUser) {
+    buyPremiumBtn.removeEventListener('click', handlePremiumPurchase);
+    buyPremiumBtn.innerHTML = "Premium Member &#128081";
+    reportsLink.removeAttribute("onclick");
+    leaderboardLink.removeAttribute("onclick");
+    leaderboardLink.setAttribute("href", "../leaderboard/leaderboard.html");
+    reportsLink.setAttribute("href", "../leaderboard/leaderboard.html");
+  } else {
+    buyPremiumBtn.addEventListener('click', handlePremiumPurchase);
+  }
+}
 
-//-----------------------buyPremiumBtn--------------------//
+//------------------------End--isPremiumUser------------------------//
 
 
 //-----------------------logout--------------------//
@@ -177,3 +196,6 @@ function logout() {
   window.location.href = '../loginRegister/loginRegister.html';
 }
 //-----------------------logout--------------------//
+
+isPremiumUser();
+displayData();

@@ -85,5 +85,19 @@ const updateTransactionStatus = async (req, res) => {
 };
 
 
+ const isPremiumUser = async (req, res, next) => {
+    try {
+      if (res.locals.user.isPremiumUser) {
+        return res.json({ isPremiumUser: true });
+      }
+      else{
+        return res.json({ isPremiumUser: false });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-module.exports = { userRegister, userLogin, purchasePremium, updateTransactionStatus };
+
+
+module.exports = { userRegister, userLogin, purchasePremium, updateTransactionStatus,isPremiumUser };
