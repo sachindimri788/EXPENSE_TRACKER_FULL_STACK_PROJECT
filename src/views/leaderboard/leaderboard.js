@@ -10,12 +10,12 @@ async function displayData() {
         const data = response.data;
 
         for (let i = 0; i < data.length; i++) {
-            const { name, expenseAmount } = data[i];
+            const { name, totalExpenses } = data[i];
             const newRow = document.createElement("tr");
             newRow.innerHTML = `
           <td>${i + 1}</td>
           <td>${name}</td>
-          <td>${expenseAmount}</td>
+          <td>${totalExpenses}</td>
           `;
             tbodyId.appendChild(newRow);
         }

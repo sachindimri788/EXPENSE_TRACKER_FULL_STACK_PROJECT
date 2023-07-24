@@ -6,12 +6,7 @@ const premiumServices = new PremiumServices();
 const getAllUser = async (req, res) => {
   try {
     const expenses=await premiumServices.getAllUserExpenses();
-    const result = expenses.map((expense) => ({
-      name: expense.getDataValue('name'),
-      expenseAmount: expense.getDataValue('totalExpense'),
-    }));
-
-    return res.status(200).json(result);
+    return res.status(200).json(expenses);
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: 'An error occurred while fetching the leaderboard' });

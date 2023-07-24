@@ -1,18 +1,14 @@
-const PremiumRepo=require('../repo/premiumRepo');
-const premiumRepo=new PremiumRepo();
-class PremiumServices{
-    getAllUserExpenses(){
+const PremiumRepo = require('../repo/premiumRepo');
+const premiumRepo = new PremiumRepo();
 
+class PremiumServices {
+  async getAllUserExpenses() {
+    try {
+      return await premiumRepo.getAllUserExpenses();
+    } catch (error) {
+      throw new Error(error.message ? error.message : 'An error occurred while fetching user expenses.');
     }
-    async getAllUserExpenses(){
-        try {
-            return await premiumRepo.getAllUserExpenses();
-        } catch (error) {
-            throw new Error(error.message?error.message:"error") 
-        }
-    }
-       
+  }
 }
 
-
-module.exports=PremiumServices;
+module.exports = PremiumServices;

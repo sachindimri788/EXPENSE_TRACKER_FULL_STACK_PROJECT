@@ -9,28 +9,29 @@ const User = sequelize.define(
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement:true
+      autoIncrement: true
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-    
+
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-     
+
     },
-    password:{
-        type:DataTypes.STRING,
-        allowNull: false,
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     isPremiumUser: DataTypes.BOOLEAN,
-  // totalExpenses: {
-  //   type: Sequelize.INTEGER,
-  //   defaultValue: 0,
-  // },
+    
+    totalExpenses: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
   },
 );
 
-module.exports=User;
+module.exports = User;
