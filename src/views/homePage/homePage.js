@@ -1,6 +1,4 @@
 let id = "";
-
-
 const form = document.getElementById('myForm');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -16,26 +14,33 @@ form.addEventListener('submit', async (event) => {
     try {
       const token = localStorage.getItem('token');
       await axios.post('http://localhost:4000/expense', obj, {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` }
       });
       console.log('User verified');
       await displayData();
       form.reset();
 
     } catch (error) {
-      window.location.href = '../loginRegister/loginRegister.html';
-
+      if (error.response && error.response.status === 403) {
+        window.location.href = '../loginRegister/loginRegister.html';
+      } else {
+        console.log(error);
+      }
     }
   } else {
     try {
       const token = localStorage.getItem('token');
       await axios.put(`http://localhost:4000/expense/${id}`, obj, {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` }
       });
       await displayData();
       form.reset();
     } catch (error) {
-      window.location.href = '../loginRegister/loginRegister.html';
+      if (error.response && error.response.status === 403) {
+        window.location.href = '../loginRegister/loginRegister.html';
+      } else {
+        console.log(error);
+      }
     }
     id = '';
   }
@@ -45,7 +50,7 @@ async function displayData() {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:4000/expense', {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: { Authorization: `Bearer ${token}` }
     });
     const tbody = document.getElementById('tbodyId');
     tbody.innerHTML = '';
@@ -75,8 +80,11 @@ async function displayData() {
       }
     }
   } catch (error) {
-    console.log(error)
-    window.location.href = '../loginRegister/loginRegister.html';
+    if (error.response && error.response.status === 403) {
+      window.location.href = '../loginRegister/loginRegister.html';
+    } else {
+      console.log(error);
+    }
 
   }
 }
@@ -85,12 +93,15 @@ async function deleteData(id) {
   try {
     const token = localStorage.getItem('token');
     await axios.delete(`http://localhost:4000/expense/${id}`, {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: { Authorization: `Bearer ${token}` }
     });
     await displayData();
   } catch (error) {
-    window.location.href = '../loginRegister/loginRegister.html';
-
+    if (error.response && error.response.status === 403) {
+      window.location.href = '../loginRegister/loginRegister.html';
+    } else {
+      console.log(error);
+    }
   }
 }
 
@@ -98,7 +109,7 @@ async function editData(editId) {
   try {
     const token = localStorage.getItem('token');
     const response = await axios.get('http://localhost:4000/expense', {
-      headers: {Authorization: `Bearer ${token}`}
+      headers: { Authorization: `Bearer ${token}` }
     });
     const data = response.data;
     if (data !== null) {
@@ -111,7 +122,11 @@ async function editData(editId) {
       }
     }
   } catch (error) {
-    window.location.href = '../loginRegister/loginRegister.html';
+    if (error.response && error.response.status === 403) {
+      window.location.href = '../loginRegister/loginRegister.html';
+    } else {
+      console.log(error);
+    }
   }
 }
 
@@ -121,7 +136,7 @@ async function editData(editId) {
 
 //-----------------------buyPremiumBtn--------------------//
 
-const buyPremiumBtn=document.getElementById('buyPremiumBtn');
+const buyPremiumBtn = document.getElementById('buyPremiumBtn');
 
 async function handlePremiumPurchase() {
   try {
@@ -141,7 +156,6 @@ async function handlePremiumPurchase() {
             },
             { headers: { Authorization: `Bearer ${token}` } }
           );
-          console.log(resp)
           if (resp.data.success) {
             alert("Welcome to our Premium Membership");
             isPremiumUser();

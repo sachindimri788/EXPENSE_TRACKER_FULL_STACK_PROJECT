@@ -8,20 +8,17 @@ class UserServices {
         let result = {};
         const exist = await userRepo.isMailExists(user.email);
         if (!exist) {
-            bcrypt.hash(user.password, 10, async (err, hash) => {
-                if (hash) {
-                    await userRepo.userRegister(user, hash);
-                    result.statusCode = 200;
-                    result.message = "Register Successful";
-                    return result;
-                }
-                else {
-                    result.statusCode = 500;
-                    result.message = "internal Error";
-                    return result;
-                }
-            });
-
+            const hash = await bcrypt.hash(user.password, 10);
+            if (hash) {
+                await userRepo.userRegister(user, hash);
+                result.statusCode = 200;
+                result.message = "Register Successful";
+                return result;
+            } else {
+                result.statusCode = 500;
+                result.message = "Internal Error";
+                return result;
+            }
         }
         else {
             result.statusCode = 409;

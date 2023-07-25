@@ -1,23 +1,36 @@
-const { where } = require('sequelize');
 const Expense = require('../models/expenseModel');
 const User = require('../models/userModel');
 
 class UserRepo {
-    async addExpense(expenseInfo, userId) {
-        return await Expense.create({ ...expenseInfo, userId });
+
+    async addExpense(expenseInfo, userId, transaction = null) {
+        if (transaction) {
+            return await Expense.create({ ...expenseInfo, userId }, { transaction });
+        } else {
+            return await Expense.create({ ...expenseInfo, userId });
+        }
     }
-    
-    async updateExpenseInUserTable(userId) {
-        const totalExpenses = await Expense.sum('expenseAmount', {
-            where: { userId },
-        });
-        return await User.update({ totalExpenses }, { where: { id: userId } });
+
+    async updateExpenseInUserTable(userId, transaction = null) {
+        if (transaction) {
+            const totalExpenses = await Expense.sum('expenseAmount', {
+                where: { userId },
+                transaction,
+            });
+            return await User.update({ totalExpenses }, { where: { id: userId }, transaction });
+        } else {
+            const totalExpenses = await Expense.sum('expenseAmount', {
+                where: { userId },
+            });
+            return await User.update({ totalExpenses }, { where: { id: userId } });
+        }
     }
+
 
     async getAllExpense(userId) {
         return await Expense.findAll({ where: { userId } });
     }
-    
+
     async updateExpense(updatedExpense, id) {
         const expense = await Expense.findOne({ where: { id } });
         expense.expenseAmount = updatedExpense.expenseAmount;

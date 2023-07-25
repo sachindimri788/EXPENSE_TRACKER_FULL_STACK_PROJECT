@@ -20,7 +20,11 @@ async function displayData() {
             tbodyId.appendChild(newRow);
         }
     } catch (error) {
-        window.location.href = '../loginRegister/loginRegister.html';
+        if (error.response && error.response.status === 403) {
+            window.location.href = '../loginRegister/loginRegister.html';
+        } else {
+            console.log(error);
+        }
     }
 }
 
@@ -33,11 +37,15 @@ async function isPremiumUser() {
         });
         if (res.data.isPremiumUser) {
             buyPremiumBtn.innerHTML = "Premium Member &#128081";
-          } else {
+        } else {
             window.location.href = '../homePage/homePage.html';
-          }
+        }
     } catch (error) {
-        alert("hey")
+        if (error.response && error.response.status === 403) {
+            window.location.href = '../loginRegister/loginRegister.html';
+        } else {
+            console.log(error);
+        }
     }
 }
 isPremiumUser();
