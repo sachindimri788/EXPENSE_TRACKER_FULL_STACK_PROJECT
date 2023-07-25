@@ -1,6 +1,5 @@
 const UserServices = require('../services/userService');
 const Razorpay = require('razorpay');
-const { generateToken } = require('../util/auth');
 const userServices = new UserServices();
 require('dotenv').config({ path: './env/development.env' })
 
@@ -8,16 +7,10 @@ const userRegister = async (req, res) => {
     try {
         const { name, email, password } = req.body;
         const user = { name, email, password }
-        const exist = await userServices.isMailExists(email);
-        if (!exist) {
-            await userServices.userRegister(user)
-            return res.status(200).json({ message: "Register Successful" });
-        }
-        else {
-            return res.status(409).json({ message: "Email Already Exists" });
-        }
+        const result= await userServices.userRegister(user);
+        return res.status(result.statusCode).json({message:result.message});
     } catch (error) {
-        return res.status(500).json({ message: "failed", error: error.message })
+        return res.status(500).json({ message: "failed"})
     }
 
 };
@@ -25,22 +18,10 @@ const userRegister = async (req, res) => {
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const exist = await userServices.isMailExists(email);
-        if (exist) {
-            const userInfo = await userServices.userLogin(email, password);
-            if (userInfo) {
-
-                const token = generateToken({ userId: userInfo.dataValues.id, userName: userInfo.dataValues.name });
-                return res.status(200).json({ message: "Login SuccessFully", token });
-            } else {
-                return res.status(401).json({ message: "Invalid Password" });
-            }
-        }
-        else {
-            return res.status(404).json({ message: "User Not found" });
-        }
+        const result=await userServices.userLogin(email,password);
+        return res.status(result.statusCode).json({message:result.message,token: result.token ? result.token : undefined})
     } catch (error) {
-        return res.status(500).json({ message: "failed", error: error.message });
+        return res.status(500).json({ message: "failed"});
     }
 }
 
@@ -80,7 +61,7 @@ const updateTransactionStatus = async (req, res) => {
         return res.status(202).json({ success: true, message: "Transaction Successful" });
     } catch (err) {
         console.log(err);
-        return res.status(500).json({ success: false, error: err, message: "Something went wrong" });
+        return res.status(500).json({ success: false, message: "Something went wrong" });
     }
 };
 
@@ -95,6 +76,7 @@ const updateTransactionStatus = async (req, res) => {
       }
     } catch (error) {
       console.log(error);
+      return res.status(500).json({ message: "failed"});
     }
   };
 

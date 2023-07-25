@@ -1,58 +1,74 @@
 const UserRepo = require('../repo/userRepo');
 const userRepo = new UserRepo();
+const bcrypt = require('bcrypt');
+const { generateToken } = require('../util/auth');
+
 class UserServices {
     async userRegister(user) {
-        try {
-            return userRepo.userRegister(user);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");     //if error from services then simple error or if error from userRepo then error.message
-        }
+        let result = {};
+        const exist = await userRepo.isMailExists(user.email);
+        if (!exist) {
+            bcrypt.hash(user.password, 10, async (err, hash) => {
+                if (hash) {
+                    await userRepo.userRegister(user, hash);
+                    result.statusCode = 200;
+                    result.message = "Register Successful";
+                    return result;
+                }
+                else {
+                    result.statusCode = 500;
+                    result.message = "internal Error";
+                    return result;
+                }
+            });
 
-    }
-    async isMailExists(email) {
-        try {
-            return userRepo.isMailExists(email);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
         }
-
+        else {
+            result.statusCode = 409;
+            result.message = "Email Already Exists";
+            return result;
+        }
     }
+
     async userLogin(email, password) {
-        try {
-            return userRepo.userLogin(email, password);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
+        let result = {};
+        const exist = await userRepo.isMailExists(email);
+        if (exist) {
+            const userInfo = await userRepo.userLogin(email);
+            const bpass = await bcrypt.compare(password, userInfo.password);
+            if (bpass) {
+                const token = generateToken({ userId: userInfo.dataValues.id, userName: userInfo.dataValues.name });
+                result.statusCode = 200;
+                result.message = "Login SuccessFully";
+                result.token = token;
+                return result;
+            } else {
+                result.statusCode = 401;
+                result.message = "Invalid Password";
+                return result;
+            }
         }
-
+        else {
+            result.statusCode = 401;
+            result.message = "User Not found";
+            return result;
+        }
     }
+
     async findByStatusAndId(info) {
-        try {
-            return userRepo.findByStatusAndId(info);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
-        }
+        return userRepo.findByStatusAndId(info);
+
     }
     async createOrder(order) {
-        try {
-            return userRepo.createOrder(order);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
-        }
+        return userRepo.createOrder(order);
     }
 
-    async orderUpdate(info,orderId){
-        try {
-            return userRepo.orderUpdate(info,orderId);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
-        }
+    async orderUpdate(info, orderId) {
+        return userRepo.orderUpdate(info, orderId);
     }
-    async userUpdate(info,id){
-        try {
-            return userRepo.userUpdate(info,id);
-        } catch (error) {
-            throw new Error(error.message ? error.message : "error");
-        }
+
+    async userUpdate(info, id) {
+        return userRepo.userUpdate(info, id);
     }
 }
 

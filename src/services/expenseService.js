@@ -1,37 +1,24 @@
-const ExpenseRepo=require('../repo/expenseRepo');
-const expenseRepo=new ExpenseRepo();
-class ExpenseServices{
-    async addExpense(expenseInfo,userId){
-        try {
-            return await expenseRepo.addExpense(expenseInfo,userId)
-        } catch (error) {
-            throw new Error(error.message?error.message:"error") //if error from services then simple error or if error from userRepo then error.message
-        }
+const ExpenseRepo = require('../repo/expenseRepo');
+const expenseRepo = new ExpenseRepo();
+class ExpenseServices {
+    async addExpense(expenseInfo, userId) {
+        await expenseRepo.addExpense(expenseInfo, userId);
+        return await expenseRepo.updateExpenseInUserTable(userId);
     }
+    async getAllExpense(userId) {
+        await expenseRepo.updateExpenseInUserTable(userId);
+        return await expenseRepo.getAllExpense(userId);
 
-    async getAllExpense(userId){
-        try {
-            return await expenseRepo.getAllExpense(userId);
-        } catch (error) {
-            throw new Error(error.message?error.message:"error")
-        }
     }
-    async updateExpense(updatedExpense,id){
-        try {
-            return await expenseRepo.updateExpense(updatedExpense,id);
-        } catch (error) {
-            throw new Error(error.message?error.message:"error")
-        }
+    async updateExpense(updatedExpense, id, userId) {
+        await expenseRepo.updateExpense(updatedExpense, id, userId);
+        return await expenseRepo.updateExpenseInUserTable(userId);
     }
-    async deleteExpense(id){
-        try{
-            return await expenseRepo.deleteExpense(id);
-        }
-        catch(error){
-            throw new Error(error.message?error.message:"error")
-        }
+    async deleteExpense(id, userId) {
+        await expenseRepo.deleteExpense(id, userId);
+        return await expenseRepo.updateExpenseInUserTable(userId);
     }
 }
 
 
-module.exports=ExpenseServices;
+module.exports = ExpenseServices;
