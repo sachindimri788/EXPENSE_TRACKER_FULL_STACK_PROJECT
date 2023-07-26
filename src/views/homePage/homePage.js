@@ -203,12 +203,9 @@ async function isPremiumUser() {
 //-----------------------logout--------------------//
 const logoutButton = document.getElementById("logoutBtn");
 logoutButton.addEventListener("click", () => {
-  localStorage.removeItem("token");
-  logout();
+    localStorage.removeItem("token");
+    window.location.href = '../loginRegister/loginRegister.html';
 });
-function logout() {
-  window.location.href = '../loginRegister/loginRegister.html';
-}
 //-----------------------logout--------------------//
 
 isPremiumUser();

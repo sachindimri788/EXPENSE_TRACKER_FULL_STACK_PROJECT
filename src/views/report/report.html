@@ -28,12 +28,12 @@
                     </li>
                     <li class="nav-item">
                         <a id="reportsLink" class="nav-link active" aria-current="page"
-                            href="../report/report.html">Reports
+                            href="javascript:location.href=location.href;">Reports
                             &#128176</a>
                     </li>
                     <li class="nav-item">
                         <a id="leaderboardLink" class="nav-link active" aria-current="page"
-                            href="javascript:location.href=location.href;">LeaderBoard
+                            href="../leaderboard/leaderboard.html">LeaderBoard
                             &#128176</a>
                     </li>
                 </ul>
@@ -52,29 +52,84 @@
     </nav>
     <!------------------------------------------------- Nav Bar Ends ------------------------------------------------->
 
-    <!------------------------------------------------- LeaderBoard ------------------------------------------------->
-    <div class="container mt-4 p-3 d-flex justify-content-center">
-        <div>
-            <h2 class="">💹 LEADERBOARD 💹</h2>
+    <div class="container">
+        <!-- ----------------------------------Daily Reports -------------------------------------------------->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h3>DAILY REPORT</h3>
+            </div>
+            <div class="col-md-6">
+                <form>
+                    <div class="mb-3">
+                        <label for="dailyDate" class="form-label">Select Date</label>
+                        <input type="date" class="form-control" id="dailyDate" />
+                    </div>
+                    <button id="dailyDateShowBtn" type="submit" class="btn btn-primary showBtn">Click</button>
+                </form>
+            </div>
+            <div class="col-md-12 mt-3">
+                <table id="dailyTable" class="table table-hover display" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyDailyId">
+                        <!-- Daily table body content will be generated dynamically -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div> <br> <br>
-    <div class="table-responsive d-flex justify-content-center">
-        <table class="table table-hover" style="width: 70%">
-            <!-- table head -->
-            <thead>
-                <tr>
-                    <th scope="col" style="width: 35%">Position</th>
-                    <th scope="col" style="width: 35%">Name</th>
-                    <th scope="col" style="width: 20%">$ Expenses $</th>
-                </tr>
-            </thead>
-            <!-- table body -->
-            <tbody id="tbodyId">
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button id="downloadDailyBtn" class="btn btn-primary">Download Daily Expenses</button>
+            </div>
+        </div>
+        <br>
+        <!-- ----------------------------------Daily Reports Ends-------------------------------------------------->
 
-            </tbody>
-        </table>
+
+        <!-- ----------------------------------Monthly Reports -------------------------------------------------->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <h3>MONTHLY REPORT</h3>
+            </div>
+            <div class="col-md-6">
+                <form>
+                    <div class="mb-3">
+                        <label for="monthlyDate" class="form-label">Select Date</label>
+                        <input type="date" class="form-control" id="monthlyDate" />
+                    </div>
+                    <button id="monthlyDateShowBtn" type="submit" class="btn btn-primary showBtn">Click</button>
+                </form>
+            </div>
+            <div class="col-md-12 mt-3">
+                <table id="monthlyTable" class="table table-hover display" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyMonthlyId">
+                        <!-- Monthly table body content will be generated dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <button id="downloadMonthlyBtn" class="btn btn-primary">Download Monthly Expenses</button>
+            </div>
+        </div>
     </div>
-    <!------------------------------------------------- LeaderBoard End ------------------------------------------------->
+
+    <!-- ----------------------------------Monthly Reports Ends-------------------------------------------------->
 
     <!-- ------------------------------------------- Footer ---------------------------------------------------->
     <footer class="bottom text-center p-3">
@@ -94,7 +149,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"
         integrity="sha512-QTnb9BQkG4fBYIt9JGvYmxPpd6TBeKp6lsUrtiVQsrJ9sb33Bn9s0wMQO9qVBFbPX3xHRAsBHvXlcsrnJjExjg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="./leaderboard.js"></script>
+    <script src="./report.js"></script>
 
 </body>
 

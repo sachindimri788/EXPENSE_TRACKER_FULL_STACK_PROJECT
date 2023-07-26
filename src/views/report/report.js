@@ -1,33 +1,24 @@
-const tbodyId = document.getElementById("tbodyId");
-
-async function displayData() {
-    try {
-        const token = localStorage.getItem("token");
-        tbodyId.innerHTML = "";
-        const response = await axios.get("http://localhost:4000/premium/getAllUser", {
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = response.data;
-
-        for (let i = 0; i < data.length; i++) {
-            const { name, totalExpenses } = data[i];
-            const newRow = document.createElement("tr");
-            newRow.innerHTML = `
-          <td>${i + 1}</td>
-          <td>${name}</td>
-          <td>${totalExpenses}</td>
-          `;
-            tbodyId.appendChild(newRow);
-        }
-    } catch (error) {
-        if (error.response && error.response.status === 403) {
-            window.location.href = '../loginRegister/loginRegister.html';
-        } else {
-            console.log(error);
-        }
-    }
+function downloadExpensesFile(data, filename) {
+    const blob = new Blob([data], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 }
+document.getElementById('downloadDailyBtn').addEventListener('click', () => {
+    const dailyExpensesData = 'Date,Category,Description,Amount\n2023-07-01,Food,Lunch,15.50\n2023-07-02,Transportation,Bus Fare,5.25';
+    const dailyFilename = 'daily_expenses_report.txt';
+    downloadExpensesFile(dailyExpensesData, dailyFilename);
+});
 
+document.getElementById('downloadMonthlyBtn').addEventListener('click', () => {
+    const monthlyExpensesData = 'Date,Category,Description,Amount\n2023-07-01,Food,Lunch,155.50\n2023-07-02,Transportation,Bus Fare,55.25';
+    const monthlyFilename = 'monthly_expenses_report.txt';
+    downloadExpensesFile(monthlyExpensesData, monthlyFilename);
+});
 
 async function isPremiumUser() {
     try {
@@ -49,7 +40,6 @@ async function isPremiumUser() {
     }
 }
 isPremiumUser();
-displayData();
 
 //-----------------------logout--------------------//
 const logoutButton = document.getElementById("logoutBtn");
