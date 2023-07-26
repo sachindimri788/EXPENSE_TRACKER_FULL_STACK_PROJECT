@@ -1,7 +1,7 @@
 require('dotenv').config({ path: './env/development.env' })
 const Sib = require('sib-api-v3-sdk')
 
-async function sendMail(email) {
+async function sendMail(email,id) {
     const result={}
     const client = Sib.ApiClient.instance
     const apiKey = client.authentications['api-key']
@@ -21,8 +21,9 @@ async function sendMail(email) {
     await tranEmailApi.sendTransacEmail({
         sender,
         to: receivers,
-        subject: 'Subscribe to Cules Coding to become a developer',
-        htmlContent: `      <h1>hi</h1>  `,
+        subject: 'Reset Password',
+        htmlContent: `<h3>Hi! We got the request from you for reset the password. Here is the link below >>></h3>
+        <a href="http://127.0.0.1:5500/src/views/resetPassword/resetPassword.html?id=${id}"> Click Here</a>`,
     })
     return result.message="The reset link has been sent to your registered email.";
 }

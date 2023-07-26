@@ -1,4 +1,5 @@
 const Order = require('../models/orders');
+const ResetPassword = require('../models/resetPassword');
 const User = require('../models/userModel');
 
 class UserRepo {
@@ -11,7 +12,7 @@ class UserRepo {
         return exist ? true : false;
     }
 
-    async userLogin(email) {
+    async userDetails(email) {
         return await User.findOne({ where: { email } });
     }
     
@@ -32,6 +33,24 @@ class UserRepo {
         return await User.update(info, { where: id })
     }
 
+    async checkAlreadySend(userId){
+        const exist = await ResetPassword.findOne({ where: { userId ,isActive:true }});
+        return exist ? true : false;
+    }
+
+    async saveIdsInResetPassword(id,userId){
+        return await ResetPassword.create({id,userId});
+    }
+    async isResetPasswordIdExist(id){
+        return await ResetPassword.findOne({where:{id,isActive:true}});
+    }
+    
+    async updateIsActiveStatus(id){
+       return await ResetPassword.update({ isActive: false }, { where: { id} });
+    }
+    async updateUserPassword(id,password){
+        return await User.update({ password }, { where: { id } });
+    }
 }
 
 module.exports = UserRepo;

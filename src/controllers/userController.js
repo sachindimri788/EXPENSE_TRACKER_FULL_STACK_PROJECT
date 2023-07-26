@@ -93,7 +93,14 @@ const forgotPassword = async (req, res) => {
 }
 
 const resetPassword = async (req, res) => {
-
+    try {
+        const{id,password}=req.body;
+        const result = await userServices.resetPassword(id,password);
+        return res.status(200).json({ message: result.message });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "failed" });       
+    }
 }
 
 
