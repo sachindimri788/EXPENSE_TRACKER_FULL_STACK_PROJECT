@@ -11,7 +11,7 @@ class UserRepo {
         return exist ? true : false;
     }
 
-    async userLogin(email, password) {
+    async userLogin(email) {
         return await User.findOne({ where: { email } });
     }
     

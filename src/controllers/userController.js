@@ -9,9 +9,9 @@ const userRegister = async (req, res) => {
         const user = { name, email, password }
         const result = await userServices.userRegister(user);
         console.log(result)
-        return res.status(result.statusCode).json({message:result.message});
+        return res.status(result.statusCode).json({ message: result.message });
     } catch (error) {
-        return res.status(500).json({ message: "failed"})
+        return res.status(500).json({ message: "failed" })
     }
 
 };
@@ -19,10 +19,10 @@ const userRegister = async (req, res) => {
 const userLogin = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const result=await userServices.userLogin(email,password);
-        return res.status(result.statusCode).json({message:result.message,token: result.token ? result.token : undefined})
+        const result = await userServices.userLogin(email, password);
+        return res.status(result.statusCode).json({ message: result.message, token: result.token ? result.token : undefined })
     } catch (error) {
-        return res.status(500).json({ message: "failed"});
+        return res.status(500).json({ message: "failed" });
     }
 }
 
@@ -34,7 +34,7 @@ const purchasePremium = async (req, res) => {
             key_secret: process.env.RAZORPAY_KEY_SECRET
         })
         const amount = 25000;
-        const orderExist = await userServices.findByStatusAndId({ userId: res.locals.userId, status: "PENDING"})
+        const orderExist = await userServices.findByStatusAndId({ userId: res.locals.userId, status: "PENDING" })
         if (orderExist) {
             return res.status(201).json({ orderid: orderExist.dataValues.orderId, key_id: rzp.key_id });
         }
@@ -67,20 +67,34 @@ const updateTransactionStatus = async (req, res) => {
 };
 
 
- const isPremiumUser = async (req, res, next) => {
+const isPremiumUser = async (req, res) => {
     try {
-      if (res.locals.user.isPremiumUser) {
-        return res.json({ isPremiumUser: true });
-      }
-      else{
-        return res.json({ isPremiumUser: false });
-      }
+        if (res.locals.user.isPremiumUser) {
+            return res.json({ isPremiumUser: true });
+        }
+        else {
+            return res.json({ isPremiumUser: false });
+        }
     } catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: "failed"});
+        console.log(error);
+        return res.status(500).json({ message: "failed" });
     }
-  };
+};
+
+const forgotPassword = async (req, res) => {
+    try {
+        const{email}=req.body;
+        const result = await userServices.forgotPassword(email);
+        return res.status(200).json({ message: result.message });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "failed" });       
+    }
+}
+
+const resetPassword = async (req, res) => {
+
+}
 
 
-
-module.exports = { userRegister, userLogin, purchasePremium, updateTransactionStatus,isPremiumUser };
+module.exports = { userRegister, userLogin, purchasePremium, updateTransactionStatus, isPremiumUser, forgotPassword, resetPassword };

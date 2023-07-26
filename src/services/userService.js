@@ -2,6 +2,8 @@ const UserRepo = require('../repo/userRepo');
 const userRepo = new UserRepo();
 const bcrypt = require('bcrypt');
 const { generateToken } = require('../util/auth');
+const { forgotPassword } = require('../controllers/userController');
+const sendMail = require('../util/emailSendInBlue');
 
 class UserServices {
     async userRegister(user) {
@@ -48,6 +50,19 @@ class UserServices {
         else {
             result.statusCode = 401;
             result.message = "User Not found";
+            return result;
+        }
+    }
+
+    async forgotPassword(email){
+        const result={};
+        const existMail=await userRepo.isMailExists(email);
+        if(existMail){
+            await sendMail(email);
+            result.message="The reset link has been sent to your registered email."
+            return result;
+        }else{
+            result.message="Email is Not Registered";
             return result;
         }
     }
