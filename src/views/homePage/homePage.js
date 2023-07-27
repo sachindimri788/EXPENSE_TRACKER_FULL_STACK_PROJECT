@@ -61,10 +61,7 @@ async function displayData() {
         const newRow = document.createElement('tr');
         //////// DATE //////////
         const dateObject = new Date(data[i].createdAt);
-        const year = dateObject.getFullYear();
-        const month = dateObject.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
-        const day = dateObject.getDate();
-        const formattedDate = `${year}/${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}`;
+        const formattedDate = dateObject.toISOString().slice(0, 10).replace(/-/g, '/');
         //////// DATE //////////
         newRow.innerHTML = `
           <td>${formattedDate}</td>
@@ -191,7 +188,7 @@ async function isPremiumUser() {
     reportsLink.removeAttribute("onclick");
     leaderboardLink.removeAttribute("onclick");
     leaderboardLink.setAttribute("href", "../leaderboard/leaderboard.html");
-    reportsLink.setAttribute("href", "../leaderboard/leaderboard.html");
+    reportsLink.setAttribute("href", "../report/report.html");
   } else {
     buyPremiumBtn.addEventListener('click', handlePremiumPurchase);
   }
@@ -203,8 +200,8 @@ async function isPremiumUser() {
 //-----------------------logout--------------------//
 const logoutButton = document.getElementById("logoutBtn");
 logoutButton.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = '../loginRegister/loginRegister.html';
+  localStorage.removeItem("token");
+  window.location.href = '../loginRegister/loginRegister.html';
 });
 //-----------------------logout--------------------//
 

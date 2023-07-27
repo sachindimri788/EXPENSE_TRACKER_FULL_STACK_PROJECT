@@ -12,4 +12,28 @@ const getAllUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUser };
+const getDailyExpense = async (req, res) => {
+  try {
+    const userId = res.locals.userId;
+    const date = req.body.date;
+    const expenses = await premiumServices.getDailyExpense(date, userId);
+    res.status(200).json(expenses);
+  } catch (error) {
+    res.status(500).json({ error: 'error' });
+
+  }
+}
+
+const getMonthlyExpense = async (req, res) => {
+  try {
+    const userId = res.locals.userId;
+    const date = req.body.date;
+    const expenses = await premiumServices.getMonthlyExpense(date, userId);
+    res.status(200).json(expenses);
+
+  } catch (error) {
+    res.status(500).json({ error: 'error' });
+  }
+}
+
+module.exports = { getAllUser, getDailyExpense, getMonthlyExpense };

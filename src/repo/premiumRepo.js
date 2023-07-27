@@ -1,4 +1,6 @@
 const User = require('../models/userModel');
+const Expense = require('../models/expenseModel');
+const { Op } = require('sequelize');
 
 class PremiumRepo {
   async getAllUserExpenses() {
@@ -22,6 +24,29 @@ class PremiumRepo {
     //     ],
     //     order: [[sequelize.literal('totalExpense'), 'DESC']], // Order by totalExpense in descending order
     //   });
+  }
+
+  async getDailyExpense(startDate,endDate,userId){
+    
+      return await Expense.findAll({
+        where: {
+          createdAt: {
+            [Op.between]: [startDate, endDate],
+          },
+          userId: userId,
+        },
+      });
+    
+  }
+  async getMonthlyExpense(startDate,endDate,userId){
+    return await Expense.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [startDate, endDate],
+        },
+        userId: userId,
+      },
+    })
   }
 }
 
