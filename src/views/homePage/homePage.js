@@ -130,9 +130,12 @@ async function paginationBtn(pageNumer) {
         tbody.appendChild(newRow);
       }
     }
-
-  } catch (error) {
-    console.log(error);
+  }catch (error) {
+    if (error.response && error.response.status === 403) {
+      window.location.href = '../loginRegister/loginRegister.html';
+    } else {
+      console.log(error);
+    }
   }
 }
 
@@ -154,24 +157,13 @@ async function deleteData(id, pageNo) {
 }
 
 async function editData(editId, category, description, expenseAmount, pageNo) {
-  try {
     console.log(editId, category, description, expenseAmount, pageNo)
     document.getElementById('description').value = description;
     document.getElementById('expenseAmount').value = expenseAmount;
     document.getElementById('category').value = category;
     id = editId;
     page = pageNo;
-  } catch (error) {
-    if (error.response && error.response.status === 403) {
-      window.location.href = '../loginRegister/loginRegister.html';
-    } else {
-      console.log(error);
-    }
-  }
 }
-
-
-
 
 
 //-----------------------buyPremiumBtn--------------------//
