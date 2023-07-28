@@ -19,7 +19,7 @@ form.addEventListener('submit', async (event) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('User verified');
-      await paginationBtn(page);
+      await displayData();
       form.reset();
 
     } catch (error) {
@@ -50,13 +50,16 @@ form.addEventListener('submit', async (event) => {
 
 async function displayData() {
   try {
+    var pageSize=document.getElementById('pageSizeDropdown').value;
     const token = localStorage.getItem('token');
     const res = await axios.get('http://localhost:4000/expense', {
-      params: { page: 1 },
+      params: { page: 1 ,pageSize},
       headers: { Authorization: `Bearer ${token}` }
     });
     const tbody = document.getElementById('tbodyId');
     tbody.innerHTML = '';
+    const paginationUL=document.getElementById('paginationUL');
+    paginationUL.innerHTML=""
     const data = res.data.expenses;
 
     if (data != null) {
@@ -101,10 +104,11 @@ async function displayData() {
 }
 async function paginationBtn(pageNumer) {
   try {
+    var pageSize=document.getElementById('pageSizeDropdown').value;
     const pageNo = pageNumer;
     const token = localStorage.getItem("token");
     const res = await axios.get('http://localhost:4000/expense', {
-      params: { page: pageNo },
+      params: { page: pageNo,pageSize },
       headers: { Authorization: `Bearer ${token}` }
     });
     const tbody = document.getElementById('tbodyId');
@@ -146,7 +150,7 @@ async function deleteData(id, pageNo) {
     await axios.delete(`http://localhost:4000/expense/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-    await paginationBtn(pageNo);
+    await displayData();
   } catch (error) {
     if (error.response && error.response.status === 403) {
       window.location.href = '../loginRegister/loginRegister.html';
@@ -237,8 +241,13 @@ const logoutButton = document.getElementById("logoutBtn");
 logoutButton.addEventListener("click", () => {
   localStorage.removeItem("token");
   window.location.href = '../loginRegister/loginRegister.html';
+  window.location.reload();
 });
 //-----------------------logout--------------------//
 
 isPremiumUser();
 displayData();
+
+function fetchDataAndUpdatePage(){
+  displayData();
+}

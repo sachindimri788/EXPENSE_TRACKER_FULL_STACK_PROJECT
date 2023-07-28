@@ -143,5 +143,6 @@ const logoutButton = document.getElementById("logoutBtn");
 logoutButton.addEventListener("click", () => {
     localStorage.removeItem("token");
     window.location.href = '../loginRegister/loginRegister.html';
+    window.location.reload();
 });
 //-----------------------logout--------------------//

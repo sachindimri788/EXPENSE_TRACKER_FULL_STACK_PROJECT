@@ -15,9 +15,10 @@ const addExpense = async (req, res) => {
 
 const getAllExpense = async (req, res) => {
     try {
-        const page = Number(req.query.page||1);
+        const pageNumer = Number(req.query.page||1);
+        const pageSize=Number(req.query.pageSize || 5);
         const userId = res.locals.userId;
-        const expenses = await expenseServices.getAllExpense(userId,page);
+        const expenses = await expenseServices.getAllExpense(userId,pageNumer,pageSize);
         res.status(200).json(expenses);
     }
     catch (error) {
