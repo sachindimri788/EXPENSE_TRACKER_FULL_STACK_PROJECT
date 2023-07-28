@@ -27,8 +27,12 @@ class UserRepo {
     }
 
 
-    async getAllExpense(userId) {
-        return await Expense.findAll({ where: { userId } });
+    async getAllExpense(userId,limit,offset) {
+        const expenses= await Expense.findAll({ where: { userId } ,limit,offset});
+        const totalItems = await Expense.count({where:{userId}});
+        const totalPages = Math.ceil(totalItems / limit);
+        return {expenses,totalPages};
+
     }
 
     async updateExpense(updatedExpense, id) {

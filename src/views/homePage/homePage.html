@@ -28,11 +28,13 @@
                         <a class="nav-link active" aria-current="page" href="#" onclick="reloadHomePage()">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a id="reportsLink" class="nav-link active" aria-current="page" href="#" onclick="onClickAlert();">Reports
+                        <a id="reportsLink" class="nav-link active" aria-current="page" href="#"
+                            onclick="onClickAlert();">Reports
                             &#128176</a>
                     </li>
                     <li class="nav-item">
-                        <a id="leaderboardLink" class="nav-link active" aria-current="page" href="#" onclick="onClickAlert();">LeaderBoard
+                        <a id="leaderboardLink" class="nav-link active" aria-current="page" href="#"
+                            onclick="onClickAlert();">LeaderBoard
                             &#128176</a>
                     </li>
                 </ul>
@@ -119,8 +121,16 @@
                 <!-- table body ends -->
             </table>
         </div>
+        <nav aria-label="Page navigation example">
+            <ul id="paginationUL" class="pagination justify-content-md-end">
+                <!-- <li class="page-item"><a class="page-link" href="#">1</a></li>
+                     <li class="page-item"><a class="page-link" href="#">2</a></li>-->
+            </ul>
+        </nav>
     </div>
     <!------------------------------------------------- table ends ------------------------------------------------->
+
+
 
     <!-- ------------------------------------------- Footer ---------------------------------------------------->
     <footer class="bottom text-center p-3">
@@ -145,12 +155,12 @@
     <script src="./homePage.js"></script>
     <script>
         function onClickAlert() {
-          alert("Buy Premium to access this feature.");
+            alert("Buy Premium to access this feature.");
         }
-        function reloadHomePage(){
+        function reloadHomePage() {
             location.reload();
         }
-      </script>
+    </script>
     <!------------------------------------------------- script ends ------------------------------------------------->
 </body>
 

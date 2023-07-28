@@ -18,9 +18,11 @@ class ExpenseServices {
         // }
       }
 
-    async getAllExpense(userId) {
+    async getAllExpense(userId,page) {
+        const limit = 5;
+        const offset = (page - 1) * limit;
         await expenseRepo.updateExpenseInUserTable(userId);
-        return await expenseRepo.getAllExpense(userId);
+        return await expenseRepo.getAllExpense(userId,limit,offset);
     }
 
     async updateExpense(updatedExpense, id, userId) {

@@ -1,4 +1,6 @@
 let id = "";
+let page = 1;
+
 const form = document.getElementById('myForm');
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
@@ -17,7 +19,7 @@ form.addEventListener('submit', async (event) => {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('User verified');
-      await displayData();
+      await paginationBtn(page);
       form.reset();
 
     } catch (error) {
@@ -33,7 +35,7 @@ form.addEventListener('submit', async (event) => {
       await axios.put(`http://localhost:4000/expense/${id}`, obj, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      await displayData();
+      await paginationBtn(page);
       form.reset();
     } catch (error) {
       if (error.response && error.response.status === 403) {
@@ -49,13 +51,65 @@ form.addEventListener('submit', async (event) => {
 async function displayData() {
   try {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:4000/expense', {
+    const res = await axios.get('http://localhost:4000/expense', {
+      params: { page: 1 },
       headers: { Authorization: `Bearer ${token}` }
     });
     const tbody = document.getElementById('tbodyId');
     tbody.innerHTML = '';
-    const data = response.data;
+    const data = res.data.expenses;
 
+    if (data != null) {
+      for (let i = 0; i < data.length; i++) {
+        const newRow = document.createElement('tr');
+        //////// DATE //////////
+        const dateObject = new Date(data[i].createdAt);
+        const formattedDate = dateObject.toISOString().slice(0, 10).replace(/-/g, '/');
+        //////// DATE //////////
+        newRow.innerHTML = `
+        <td>${formattedDate}</td>
+        <td>${data[i].category}</td>
+        <td>${data[i].description}</td>
+        <td>${data[i].expenseAmount}</td>
+        <td>
+          <button class="editDelete btn btn-danger" onclick="deleteData('${data[i].id}',1)">Delete</button>
+          <button class="editDelete btn btn-secondary" onclick="editData(${data[i].id}, '${data[i].category}', '${data[i].description}', ${data[i].expenseAmount}, 1)">Edit</button>
+        </td>
+      `;
+        tbody.appendChild(newRow);
+      }
+    }
+    const ul = document.getElementById("paginationUL");
+    for (let i = 1; i <= res.data.totalPages; i++) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      li.setAttribute("class", "page-item");
+      a.setAttribute("class", "page-link");
+      a.setAttribute("href", "#");
+      a.appendChild(document.createTextNode(i)); ////
+      li.appendChild(a);
+      ul.appendChild(li);
+      a.addEventListener("click", (event) => paginationBtn(i));
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 403) {
+      window.location.href = '../loginRegister/loginRegister.html';
+    } else {
+      console.log(error);
+    }
+  }
+}
+async function paginationBtn(pageNumer) {
+  try {
+    const pageNo = pageNumer;
+    const token = localStorage.getItem("token");
+    const res = await axios.get('http://localhost:4000/expense', {
+      params: { page: pageNo },
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const tbody = document.getElementById('tbodyId');
+    tbody.innerHTML = '';
+    const data = res.data.expenses;
     if (data != null) {
       for (let i = 0; i < data.length; i++) {
         const newRow = document.createElement('tr');
@@ -69,30 +123,27 @@ async function displayData() {
           <td>${data[i].description}</td>
           <td>${data[i].expenseAmount}</td>
           <td>
-            <button class="editDelete btn btn-danger" onclick="deleteData('${data[i].id}')">Delete</button>
-            <button class="editDelete btn btn-secondary" onclick="editData('${data[i].id}')">Edit</button>
+            <button class="editDelete btn btn-danger" onclick="deleteData('${data[i].id}',${pageNo})">Delete</button>
+            <button class="editDelete btn btn-secondary" onclick="editData(${data[i].id}, '${data[i].category}', '${data[i].description}', '${data[i].expenseAmount}',${pageNo} )">Edit</button>
           </td>
         `;
         tbody.appendChild(newRow);
       }
     }
-  } catch (error) {
-    if (error.response && error.response.status === 403) {
-      window.location.href = '../loginRegister/loginRegister.html';
-    } else {
-      console.log(error);
-    }
 
+  } catch (error) {
+    console.log(error);
   }
 }
 
-async function deleteData(id) {
+
+async function deleteData(id, pageNo) {
   try {
     const token = localStorage.getItem('token');
     await axios.delete(`http://localhost:4000/expense/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
-    await displayData();
+    await paginationBtn(pageNo);
   } catch (error) {
     if (error.response && error.response.status === 403) {
       window.location.href = '../loginRegister/loginRegister.html';
@@ -102,22 +153,14 @@ async function deleteData(id) {
   }
 }
 
-async function editData(editId) {
+async function editData(editId, category, description, expenseAmount, pageNo) {
   try {
-    const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:4000/expense', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = response.data;
-    if (data !== null) {
-      const expense = await data.find((item) => item.id === Number(editId));
-      if (expense) {
-        document.getElementById('description').value = expense.description;
-        document.getElementById('expenseAmount').value = expense.expenseAmount;
-        document.getElementById('category').value = expense.category;
-        id = expense.id;
-      }
-    }
+    console.log(editId, category, description, expenseAmount, pageNo)
+    document.getElementById('description').value = description;
+    document.getElementById('expenseAmount').value = expenseAmount;
+    document.getElementById('category').value = category;
+    id = editId;
+    page = pageNo;
   } catch (error) {
     if (error.response && error.response.status === 403) {
       window.location.href = '../loginRegister/loginRegister.html';
