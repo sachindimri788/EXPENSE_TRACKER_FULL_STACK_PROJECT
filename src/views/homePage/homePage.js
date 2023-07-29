@@ -248,6 +248,6 @@ logoutButton.addEventListener("click", () => {
 isPremiumUser();
 displayData();
 
-function fetchDataAndUpdatePage(){
+function fetchPageSizeAndUpdatePage(){
   displayData();
 }
