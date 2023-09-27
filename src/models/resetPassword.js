@@ -1,6 +1,6 @@
-const sequelize = require('../../config/db');
-const { DataTypes } = require('sequelize');
-const User = require('./userModel');
+const sequelize = require("../../config/db");
+const { DataTypes } = require("sequelize");
+const User = require("./userModel");
 
 const ResetPassword = sequelize.define("resetpassword", {
   id: {
@@ -9,13 +9,13 @@ const ResetPassword = sequelize.define("resetpassword", {
     primaryKey: true,
   },
   isActive: DataTypes.BOOLEAN,
-  userId:{
+  userId: {
     type: DataTypes.INTEGER,
     references: {
       model: User,
       key: "id",
     },
-  }
+  },
 });
 ResetPassword.belongsTo(User);
 User.hasMany(ResetPassword);

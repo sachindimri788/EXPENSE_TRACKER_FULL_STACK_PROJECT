@@ -1,6 +1,6 @@
-const sequelize = require('../../config/db');
-const { DataTypes } = require('sequelize');
-const User = require('./userModel');
+const sequelize = require("../../config/db");
+const { DataTypes } = require("sequelize");
+const User = require("./userModel");
 
 const Order = sequelize.define("order", {
   id: {
@@ -12,13 +12,13 @@ const Order = sequelize.define("order", {
   paymentId: DataTypes.STRING,
   orderId: DataTypes.STRING,
   status: DataTypes.STRING,
-  userId:{
+  userId: {
     type: DataTypes.INTEGER,
     references: {
       model: User,
       key: "id",
     },
-  }
+  },
 });
 User.hasMany(Order);
 Order.belongsTo(User, { foreignKey: "userId", as: "userOrder" });

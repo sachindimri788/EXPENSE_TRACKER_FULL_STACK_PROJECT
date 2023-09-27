@@ -1,73 +1,75 @@
 let id = "";
 let page = 1;
 
-const form = document.getElementById('myForm');
-form.addEventListener('submit', async (event) => {
+const form = document.getElementById("myForm");
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
-  const expenseAmount = document.getElementById('expenseAmount').value;
-  const description = document.getElementById('description').value;
-  const category = document.getElementById('category').value;
+  const expenseAmount = document.getElementById("expenseAmount").value;
+  const description = document.getElementById("description").value;
+  const category = document.getElementById("category").value;
   const obj = {
     expenseAmount,
     description,
-    category
+    category,
   };
-  if (id === '') {
+  if (id === "") {
     try {
-      const token = localStorage.getItem('token');
-      await axios.post('http://localhost:4000/expense', obj, {
-        headers: { Authorization: `Bearer ${token}` }
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:4000/expense", obj, {
+        headers: { Authorization: `Bearer ${token}` },
       });
-      console.log('User verified');
+      console.log("User verified");
       await displayData();
       form.reset();
-
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        window.location.href = '../loginRegister/loginRegister.html';
+        window.location.href = "../loginRegister/loginRegister.html";
       } else {
         console.log(error);
       }
     }
   } else {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await axios.put(`http://localhost:4000/expense/${id}`, obj, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       await paginationBtn(page);
       form.reset();
     } catch (error) {
       if (error.response && error.response.status === 403) {
-        window.location.href = '../loginRegister/loginRegister.html';
+        window.location.href = "../loginRegister/loginRegister.html";
       } else {
         console.log(error);
       }
     }
-    id = '';
+    id = "";
   }
 });
 
 async function displayData() {
   try {
-    var pageSize=document.getElementById('pageSizeDropdown').value;
-    const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:4000/expense', {
-      params: { page: 1 ,pageSize},
-      headers: { Authorization: `Bearer ${token}` }
+    var pageSize = document.getElementById("pageSizeDropdown").value;
+    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:4000/expense", {
+      params: { page: 1, pageSize },
+      headers: { Authorization: `Bearer ${token}` },
     });
-    const tbody = document.getElementById('tbodyId');
-    tbody.innerHTML = '';
-    const paginationUL=document.getElementById('paginationUL');
-    paginationUL.innerHTML=""
+    const tbody = document.getElementById("tbodyId");
+    tbody.innerHTML = "";
+    const paginationUL = document.getElementById("paginationUL");
+    paginationUL.innerHTML = "";
     const data = res.data.expenses;
 
     if (data != null) {
       for (let i = 0; i < data.length; i++) {
-        const newRow = document.createElement('tr');
+        const newRow = document.createElement("tr");
         //////// DATE //////////
         const dateObject = new Date(data[i].createdAt);
-        const formattedDate = dateObject.toISOString().slice(0, 10).replace(/-/g, '/');
+        const formattedDate = dateObject
+          .toISOString()
+          .slice(0, 10)
+          .replace(/-/g, "/");
         //////// DATE //////////
         newRow.innerHTML = `
         <td>${formattedDate}</td>
@@ -96,7 +98,7 @@ async function displayData() {
     }
   } catch (error) {
     if (error.response && error.response.status === 403) {
-      window.location.href = '../loginRegister/loginRegister.html';
+      window.location.href = "../loginRegister/loginRegister.html";
     } else {
       console.log(error);
     }
@@ -104,22 +106,25 @@ async function displayData() {
 }
 async function paginationBtn(pageNumer) {
   try {
-    var pageSize=document.getElementById('pageSizeDropdown').value;
+    var pageSize = document.getElementById("pageSizeDropdown").value;
     const pageNo = pageNumer;
     const token = localStorage.getItem("token");
-    const res = await axios.get('http://localhost:4000/expense', {
-      params: { page: pageNo,pageSize },
-      headers: { Authorization: `Bearer ${token}` }
+    const res = await axios.get("http://localhost:4000/expense", {
+      params: { page: pageNo, pageSize },
+      headers: { Authorization: `Bearer ${token}` },
     });
-    const tbody = document.getElementById('tbodyId');
-    tbody.innerHTML = '';
+    const tbody = document.getElementById("tbodyId");
+    tbody.innerHTML = "";
     const data = res.data.expenses;
     if (data != null) {
       for (let i = 0; i < data.length; i++) {
-        const newRow = document.createElement('tr');
+        const newRow = document.createElement("tr");
         //////// DATE //////////
         const dateObject = new Date(data[i].createdAt);
-        const formattedDate = dateObject.toISOString().slice(0, 10).replace(/-/g, '/');
+        const formattedDate = dateObject
+          .toISOString()
+          .slice(0, 10)
+          .replace(/-/g, "/");
         //////// DATE //////////
         newRow.innerHTML = `
           <td>${formattedDate}</td>
@@ -134,26 +139,25 @@ async function paginationBtn(pageNumer) {
         tbody.appendChild(newRow);
       }
     }
-  }catch (error) {
+  } catch (error) {
     if (error.response && error.response.status === 403) {
-      window.location.href = '../loginRegister/loginRegister.html';
+      window.location.href = "../loginRegister/loginRegister.html";
     } else {
       console.log(error);
     }
   }
 }
 
-
 async function deleteData(id, pageNo) {
   try {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     await axios.delete(`http://localhost:4000/expense/${id}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
     await displayData();
   } catch (error) {
     if (error.response && error.response.status === 403) {
-      window.location.href = '../loginRegister/loginRegister.html';
+      window.location.href = "../loginRegister/loginRegister.html";
     } else {
       console.log(error);
     }
@@ -161,31 +165,32 @@ async function deleteData(id, pageNo) {
 }
 
 async function editData(editId, category, description, expenseAmount, pageNo) {
-    console.log(editId, category, description, expenseAmount, pageNo)
-    document.getElementById('description').value = description;
-    document.getElementById('expenseAmount').value = expenseAmount;
-    document.getElementById('category').value = category;
-    id = editId;
-    page = pageNo;
+  console.log(editId, category, description, expenseAmount, pageNo);
+  document.getElementById("description").value = description;
+  document.getElementById("expenseAmount").value = expenseAmount;
+  document.getElementById("category").value = category;
+  id = editId;
+  page = pageNo;
 }
-
 
 //-----------------------buyPremiumBtn--------------------//
 
-const buyPremiumBtn = document.getElementById('buyPremiumBtn');
+const buyPremiumBtn = document.getElementById("buyPremiumBtn");
 
 async function handlePremiumPurchase() {
   try {
-    const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:4000/user/purchasePremium', {
-      headers: { Authorization: `Bearer ${token}` }
+    const token = localStorage.getItem("token");
+    const res = await axios.get("http://localhost:4000/user/purchasePremium", {
+      headers: { Authorization: `Bearer ${token}` },
     });
     var options = {
       key: res.data.key_id, // Enter the Key ID generated from the Dashboard
       order_id: res.data.orderid, // For one-time payment
-      handler: async function (response) { // This handler function will handle the success payment
+      handler: async function (response) {
+        // This handler function will handle the success payment
         try {
-          const resp = await axios.post("http://localhost:4000/user/updateTransactionStatus",
+          const resp = await axios.post(
+            "http://localhost:4000/user/updateTransactionStatus",
             {
               order_id: options.order_id,
               payment_id: response.razorpay_payment_id,
@@ -211,7 +216,7 @@ async function handlePremiumPurchase() {
   }
 }
 
-buyPremiumBtn.addEventListener('click', handlePremiumPurchase);
+buyPremiumBtn.addEventListener("click", handlePremiumPurchase);
 //-----------------------End---buyPremiumBtn--------------------//
 
 //------------------------isPremiumUser------------------------//
@@ -222,25 +227,24 @@ async function isPremiumUser() {
   });
 
   if (res.data.isPremiumUser) {
-    buyPremiumBtn.removeEventListener('click', handlePremiumPurchase);
+    buyPremiumBtn.removeEventListener("click", handlePremiumPurchase);
     buyPremiumBtn.innerHTML = "Premium Member &#128081";
     reportsLink.removeAttribute("onclick");
     leaderboardLink.removeAttribute("onclick");
     leaderboardLink.setAttribute("href", "../leaderboard/leaderboard.html");
     reportsLink.setAttribute("href", "../report/report.html");
   } else {
-    buyPremiumBtn.addEventListener('click', handlePremiumPurchase);
+    buyPremiumBtn.addEventListener("click", handlePremiumPurchase);
   }
 }
 
 //------------------------End--isPremiumUser------------------------//
 
-
 //-----------------------logout--------------------//
 const logoutButton = document.getElementById("logoutBtn");
 logoutButton.addEventListener("click", () => {
   localStorage.removeItem("token");
-  window.location.href = '../loginRegister/loginRegister.html';
+  window.location.href = "../loginRegister/loginRegister.html";
   window.location.reload();
 });
 //-----------------------logout--------------------//
@@ -248,6 +252,6 @@ logoutButton.addEventListener("click", () => {
 isPremiumUser();
 displayData();
 
-function fetchPageSizeAndUpdatePage(){
+function fetchPageSizeAndUpdatePage() {
   displayData();
 }

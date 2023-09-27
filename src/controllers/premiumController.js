@@ -1,6 +1,5 @@
-const PremiumServices = require('../services/premiumService');
+const PremiumServices = require("../services/premiumService");
 const premiumServices = new PremiumServices();
-
 
 const getAllUser = async (req, res) => {
   try {
@@ -8,7 +7,9 @@ const getAllUser = async (req, res) => {
     return res.status(200).json(expenses);
   } catch (err) {
     console.log(err);
-    res.status(500).json({ error: 'An error occurred while fetching the leaderboard' });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the leaderboard" });
   }
 };
 
@@ -19,10 +20,9 @@ const getDailyExpense = async (req, res) => {
     const expenses = await premiumServices.getDailyExpense(date, userId);
     res.status(200).json(expenses);
   } catch (error) {
-    res.status(500).json({ error: 'error' });
-
+    res.status(500).json({ error: "error" });
   }
-}
+};
 
 const getMonthlyExpense = async (req, res) => {
   try {
@@ -30,10 +30,9 @@ const getMonthlyExpense = async (req, res) => {
     const date = req.body.date;
     const expenses = await premiumServices.getMonthlyExpense(date, userId);
     res.status(200).json(expenses);
-
   } catch (error) {
-    res.status(500).json({ error: 'error' });
+    res.status(500).json({ error: "error" });
   }
-}
+};
 
 module.exports = { getAllUser, getDailyExpense, getMonthlyExpense };

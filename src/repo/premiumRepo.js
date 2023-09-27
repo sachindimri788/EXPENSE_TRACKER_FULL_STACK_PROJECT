@@ -1,13 +1,12 @@
-const User = require('../models/userModel');
-const Expense = require('../models/expenseModel');
-const { Op } = require('sequelize');
+const User = require("../models/userModel");
+const Expense = require("../models/expenseModel");
+const { Op } = require("sequelize");
 
 class PremiumRepo {
   async getAllUserExpenses() {
     return await User.findAll({
       attributes: ["name", "totalExpenses"],
-      order: [["totalExpenses", "DESC"]]
-
+      order: [["totalExpenses", "DESC"]],
     });
     // return await Expense.findAll({
     //     attributes: [
@@ -26,19 +25,7 @@ class PremiumRepo {
     //   });
   }
 
-  async getDailyExpense(startDate,endDate,userId){
-    
-      return await Expense.findAll({
-        where: {
-          createdAt: {
-            [Op.between]: [startDate, endDate],
-          },
-          userId: userId,
-        },
-      });
-    
-  }
-  async getMonthlyExpense(startDate,endDate,userId){
+  async getDailyExpense(startDate, endDate, userId) {
     return await Expense.findAll({
       where: {
         createdAt: {
@@ -46,7 +33,17 @@ class PremiumRepo {
         },
         userId: userId,
       },
-    })
+    });
+  }
+  async getMonthlyExpense(startDate, endDate, userId) {
+    return await Expense.findAll({
+      where: {
+        createdAt: {
+          [Op.between]: [startDate, endDate],
+        },
+        userId: userId,
+      },
+    });
   }
 }
 
